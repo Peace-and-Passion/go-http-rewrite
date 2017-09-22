@@ -12,6 +12,10 @@ make bin
 
 All of this package's dependencies are bundled with the code in the `vendor` directory.
 
+## Example
+
+_Please write me._
+
 ## Interfaces
 
 ### RewriteRule
