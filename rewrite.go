@@ -2,7 +2,7 @@ package rewrite
 
 import (
 	"fmt"
-	"log"
+	_ "log"
 	"net/http"
 	"regexp"
 )
@@ -18,7 +18,7 @@ type RewriteRulesOptions map[string]interface{}
 func DefaultRewriteRulesOptions() RewriteRulesOptions {
 
 	opts := RewriteRulesOptions{
-		Last: false,
+		"Last": false,
 	}
 
 	return opts
@@ -36,7 +36,7 @@ func (rule *RegexpRewriteRule) Match(path string) bool {
 }
 
 func (rule *RegexpRewriteRule) Transform(path string) string {
-	return rule.regexp.ReplaceAllString(path, rw.Replace)
+	return rule.regexp.ReplaceAllString(path, rule.replace)
 }
 
 func (rule *RegexpRewriteRule) Last() bool {
@@ -56,13 +56,13 @@ func RemovePrefixRewriteRule(path string, opts RewriteRulesOptions) RewriteRule 
 		is_last = opts["Last"].(bool)
 	}
 
-	rule := RewriteRule{
+	rule := RegexpRewriteRule{
 		regexp:  re,
 		replace: "$1",
 		is_last: is_last,
 	}
 
-	return rule
+	return &rule
 }
 
 func RewriteHandler(rules []RewriteRule, next http.Handler) (http.Handler, error) {
@@ -77,7 +77,7 @@ func RewriteHandler(rules []RewriteRule, next http.Handler) (http.Handler, error
 				continue
 			}
 
-			path = re.Transform(path)
+			path = rw.Transform(path)
 
 			if rw.Last() {
 				break
