@@ -13,11 +13,11 @@ type RewriteRule interface {
 	Last() bool
 }
 
-type RewriteRulesOptions map[string]interface{}
+type RewriteRuleOptions map[string]interface{}
 
-func DefaultRewriteRulesOptions() RewriteRulesOptions {
+func DefaultRewriteRuleOptions() RewriteRuleOptions {
 
-	opts := RewriteRulesOptions{
+	opts := RewriteRuleOptions{
 		"Last": false,
 	}
 
@@ -43,7 +43,7 @@ func (rule *RegexpRewriteRule) Last() bool {
 	return rule.is_last
 }
 
-func RemovePrefixRewriteRule(path string, opts RewriteRulesOptions) RewriteRule {
+func RemovePrefixRewriteRule(path string, opts RewriteRuleOptions) RewriteRule {
 
 	pat := fmt.Sprintf("^%s(.*)", path)
 	re := regexp.MustCompile(pat)
